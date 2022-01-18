@@ -3,6 +3,8 @@ package main
 import (
 	"math/rand"
 	"fmt"
+	"encoding/json"
+
 )
 
 const letterBytes = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -29,33 +31,60 @@ func NewBook () Book {
 	b.Content = RandStringBytes(sizeBytesContentBook)
 	return b
 }
-/*
+
 type Shelf struct {
 	id int64;
-	Books []book;//cada shelf vai ter 32 libros
+	books []Book;//cada shelf vai ter 32 libros
 }
+
+func NewShelf() Shelf {
+	var s Shelf;
+	for i := 0; i < 31; i++ {
+		s.books = append(s.books, NewBook())
+	}
+	return s
+} 
 
 type Wall struct {
 	id int64;
-	shelfs []shelf;//cada parede vai conter 5 prateleiras
+	shelfs []Shelf;//cada parede vai conter 5 prateleiras
+}
+
+func NewWall() Wall {
+	var w Wall;
+	for i := 0; i < 5; i++ {
+		w.shelfs = append(w.shelfs, NewShelf())
+	}
+	return w
 }
 
 type Room struct {
 	id int64;
 	position int64;
-	Walls []wall;//cada Room so vai conter 4 paredes com livros 
+	walls []Wall;//cada Room so vai conter 4 paredes com livros 
 }
-*/
 
+func NewRoom() Room {
+	var r Room;
+	for i := 0; i < 4; i++ {
+		r.walls = append(r.walls, NewWall())
+	}
+	return r
+}
 
+func Babel() {
+	var room Room = NewRoom()
+
+	room2 := &room
+	js, err := json.Marshal(room2)
+	if err != nil {
+		fmt.Printf("Error: %s", err)
+		return;
+	}
+
+	fmt.Printf("%s", js)
+}
 
 func main() {
-	//inicio criar 
-
-	for i := 0; i < 31; i++ {
-		fmt.Print(NewBook())
-	}
-	
-	//fim criar livros
-
+	Babel()
 }
